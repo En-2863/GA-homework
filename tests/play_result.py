@@ -12,8 +12,8 @@ from utils.player import play_pitches
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
-    parser.add_argument('--exp_name', type=str, default='exp_2')
-    parser.add_argument('--num', type=int, default=0)
+    parser.add_argument('--exp_name', type=str, default='exp_3')
+    parser.add_argument('--num', type=int, default=10)
     parser.add_argument('--dt', type=float, default=0.2)
     args = parser.parse_args()
 

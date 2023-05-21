@@ -1,7 +1,7 @@
 import numpy as np
 reference=np.array([74, 73, 74, 62, 61, 69, 64, 66, 62, 74, 73, 71, 73, 78, 81, 83, 79, 78, 76, 79, 78, 76, 74, 73, 71, 69, 67, 66, 64, 67, 66, 64])  #需要取定一个参考乐曲
 
-initial_parameter= [-0.1,-0.1,1,200,100] #这些都是fitness function参数，之后可以人工修改
+initial_parameter= [-0.1,-0.1,-1,20,10] #这些都是fitness function参数，之后可以人工修改
 
 def evaluate_chord(chord):
     # chord是一个音符序列，假设为一个整数列表，表示和弦的音高
@@ -9,8 +9,8 @@ def evaluate_chord(chord):
     # 在这里进行和弦的评估，根据具体需求和评估标准来编写评估逻辑
     
     # 示例评估逻辑：判断和弦是否符合某种特定的音程规则
-    intervals = [chord[i+1] - chord[i] for i in range(len(chord)-1)]  # 计算音程
-    
+    intervals = np.array([chord[i+1] - chord[i] for i in range(len(chord)-1)])  # 计算音程
+    intervals[intervals>20] = 4
     # 定义一个目标音程列表，例如：大三度、纯四度、纯五度
     target_intervals = [4, 5, 7]
     
@@ -42,17 +42,27 @@ def evaluate_leap_transitions(melody):
 
 
 def fitness_function(x,parameter):  #x是自变量，其余是参数 
-    part_1 = abs(np.mean(reference)-np.mean(x))  #part_1表示与参考数组的均值差距
-    part_2 = abs(np.var(reference)-np.var(x))   #part_2表示与参考数组的方差差距
+    x=np.array(x)
+    part_1 = abs(np.mean(reference)-np.mean(x[x>=21]))  #part_1表示与参考数组的均值差距
+    part_2 = abs(np.var(reference)-np.var(x[x>=21]))   #part_2表示与参考数组的方差差距
     part_3 = 0    #part_3表示超出一个范围的音符个数，这里取【65，75】
-    n=0
+    n=1
+    m=0
     for i in range(len(x)):
-        if not (65< x[i] <75) or (x[i] == 20) or (x[i] == 0):
+        if (x[i]>=21) and not (65< x[i] <75) :
             n += 1
+        if (x[i]==0) or (x[i]==20):
+            m += 1
+    if m < 4:
+        n+=(4-m)
+    if m > 12:
+        n+=m-12
 
-    part_3 = 1/n
-    x_filter = x[x != 0 & x != 20]
-    part_4 = evaluate_chord(x_filter) #part_4表示好听的和弦的比例
+
+    part_3 = n/2
+    x_filter = x[x>=21]
+    #print(x,x_filter)
+    part_4 = evaluate_chord(x) #part_4表示好听的和弦的比例
     part_5 = evaluate_leap_transitions(x_filter)
     return parameter[0]*part_1 + parameter[1]*part_2 + parameter[2]*part_3 + parameter[3]*part_4 + parameter[4]*part_5
 

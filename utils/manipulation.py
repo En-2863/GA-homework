@@ -26,11 +26,11 @@ def randomShift(x):
 
 def randomChange(x):
     m = np.random.random(x.shape[0])*2-1
-    m = np.where(m > 0.8)
-    mask1 = m[m > 0.8 & m < 1]
-    mask2 = m[m > 0.6 & m < 0.8]
-    mask3 = m[m > -1.0 & m < -0.8]
-    mask4 = m[m > -0.8 & m < -0.6]
+    # m = np.where(m > 0.8)
+    mask1 = (m > 0.8) & (m < 1)
+    mask2 = (m > 0.6) & (m < 0.8)
+    mask3 = (m > -1.0) & (m < -0.8)
+    mask4 = (m > -0.8) & (m < -0.6)
     m = np.zeros_like(x)
     m[mask1] = 2
     m[mask2] = 1
@@ -125,4 +125,4 @@ def random_operate(x):
     x2 = section_operate(x[8:16])
     x3 = section_operate(x[16:24])
     x4 = section_operate(x[24:32])
-    return np.concatenate(x1, x2, x3, x4)
+    return np.concatenate([x1, x2, x3, x4])

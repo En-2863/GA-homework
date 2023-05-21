@@ -4,17 +4,20 @@ import sys
 os.chdir(os.path.dirname(os.path.realpath(__file__)))
 sys.path.append(os.path.realpath('.'))
 
+import shutil
 import argparse
 import random
 import numpy as np
 from tqdm import tqdm
 from utils.conversions import notes2codes
 from utils.manipulation import crossOver, random_operate
+from utils.fitness_function import initial_parameter, fitness_function
+from torch.utils.tensorboard.writer import SummaryWriter
 
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
-    parser.add_argument('--exp_name', type=str, default='exp_1')
+    parser.add_argument('--exp_name', type=str, default='exp_3')
     parser.add_argument('--seed', type=int, default=0)
     parser.add_argument('--n_iters', type=int, default=100)
     parser.add_argument('--population', type=int, default=100)
@@ -45,8 +48,12 @@ if __name__ == '__main__':
     
     # genetic algorithm loop
     
-    for step in tqdm(range(args.n_iters), desc='surviving'):
-    # for step in range(args.n_iters):
+    if os.path.exists(os.path.join('experiments', args.exp_name, 'logs')):
+        shutil.rmtree(os.path.join('experiments', args.exp_name, 'logs'))
+    os.makedirs(os.path.join('experiments', args.exp_name, 'logs'), exist_ok=True)
+    writer = SummaryWriter(log_dir=os.path.join('experiments', args.exp_name, 'logs'))
+    
+    for step in tqdm(range(1, args.n_iters + 1), desc='surviving'):
         
         # augment population
         augmented_population = np.concatenate([
@@ -60,10 +67,15 @@ if __name__ == '__main__':
         augmented_population = np.concatenate([augmented_population, children])
         
         # evaluate fitness
-        
+        fitness_scores = np.array([fitness_function(codes, initial_parameter) for codes in augmented_population])
+        ranks = np.argsort(fitness_scores)
         
         # choose best
-        population = augmented_population[np.random.choice(len(augmented_population), args.population)]
+        # population = augmented_population[np.random.choice(len(augmented_population), args.population)]
+        population = augmented_population[ranks[-args.population:]]
+        
+        # log fitness
+        writer.add_scalar('fitness/fitness', fitness_scores.mean(), step)
     
     # save results
     np.save(os.path.join('experiments', args.exp_name, 'final_population.npy'), population)

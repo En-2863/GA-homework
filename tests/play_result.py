@@ -12,7 +12,7 @@ from utils.player import play_pitches
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
-    parser.add_argument('--exp_name', type=str, default='exp_1')
+    parser.add_argument('--exp_name', type=str, default='exp_2')
     parser.add_argument('--num', type=int, default=0)
     parser.add_argument('--dt', type=float, default=0.2)
     args = parser.parse_args()
@@ -21,7 +21,9 @@ if __name__ == '__main__':
     population = np.load(os.path.join('experiments', args.exp_name, 'final_population.npy'))
     
     # convert format
-    pitches = codes2piches(population[args.num])
+    codes = population[args.num]
+    codes = clamp_CAGED(codes)
+    pitches = codes2piches(codes)
     
     # play pitches
     play_pitches(pitches, args.dt)

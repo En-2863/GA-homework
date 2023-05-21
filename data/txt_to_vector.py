@@ -63,3 +63,16 @@ def txt_to_vector():
             vec = music_to_vector(pitch)
             vec_list.append(vec)
     return vec_list
+
+
+# convert tone.txt to vector
+def txt_to_tone():
+    vec_list = []
+
+    with open('.\data/\/tone.txt') as file:
+        contents = file.readlines()
+        for line in contents:
+            line = line.lower()
+            vec = sound_map(line)
+            vec_list.append(vec)
+    return vec_list

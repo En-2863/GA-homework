@@ -1,7 +1,7 @@
 import numpy as np
 reference=np.array([74, 73, 74, 62, 61, 69, 64, 66, 62, 74, 73, 71, 73, 78, 81, 83, 79, 78, 76, 79, 78, 76, 74, 73, 71, 69, 67, 66, 64, 67, 66, 64])  #需要取定一个参考乐曲
 
-initial_parameter= [-0.1,-0.1,-1,20,10] #这些都是fitness function参数，之后可以人工修改
+initial_parameter= [-0.1,-0.1,-1,10,10] #这些都是fitness function参数，之后可以人工修改
 
 def evaluate_chord(chord):
     # chord是一个音符序列，假设为一个整数列表，表示和弦的音高

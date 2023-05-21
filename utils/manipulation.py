@@ -43,18 +43,28 @@ def randomChange(x):
 
 
 def shadow(x, n):
-    return np.where(x >= 21, n*2-x, x)
+    return np.where(x >= 21, n-x, x)
 
 # 围绕中央c倒影
 
 
 def c_shadow(x):
-    return shadow(x, 60)
+    return shadow(x, 120)
 
 
 def centered_shadow(x):
     center = np.max(np.where(x >= 21, x, 60))+np.min(np.where(x >= 21, x, 60))
     return shadow(x, center)
+
+# 向中间靠拢
+
+
+def centering(x):
+    center = np.average(x)
+    y = x-center
+    x = np.where(y > 12, x-12, x)
+    x = np.where(y < -12, x+12, x)
+    return x
 
 # 逆行变换
 
@@ -125,4 +135,4 @@ def random_operate(x):
     x2 = section_operate(x[8:16])
     x3 = section_operate(x[16:24])
     x4 = section_operate(x[24:32])
-    return np.concatenate([x1, x2, x3, x4])
+    return centering(np.concatenate([x1, x2, x3, x4]))

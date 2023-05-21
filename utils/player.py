@@ -7,7 +7,7 @@ def play_pitches(pichtes, dt):
         if type(pitch) == int:
             sinewaves[str(pitch)] = SineWave(pitch=pitch)
     for pitch in pichtes:
-        print(pitch)
+        print(pitch + 60 if type(pitch) == int else pitch)
         if pitch == 'rest':
             if 'sinewave' in locals():
                 sinewave.stop()

@@ -135,4 +135,4 @@ def random_operate(x):
     x2 = section_operate(x[8:16])
     x3 = section_operate(x[16:24])
     x4 = section_operate(x[24:32])
-    return np.concatenate([x1, x2, x3, x4])
+    return centering(np.concatenate([x1, x2, x3, x4]))

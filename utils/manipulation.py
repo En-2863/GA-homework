@@ -21,6 +21,24 @@ def shift(x, n):
 def randomShift(x):
     return shift(x, random.randint(-12, 12))
 
+# 逐个随机平移
+
+
+def randomChange(x):
+    m = np.random.random(x.shape[0])*2-1
+    m = np.where(m > 0.8)
+    mask1 = m[m > 0.8 & m < 1]
+    mask2 = m[m > 0.6 & m < 0.8]
+    mask3 = m[m > -1.0 & m < -0.8]
+    mask4 = m[m > -0.8 & m < -0.6]
+    m = np.zeros_like(x)
+    m[mask1] = 2
+    m[mask2] = 1
+    m[mask3] = -1
+    m[mask4] = -2
+    m = m+x
+    return np.where(x >= 21, m, x)
+
 # 倒影变换
 
 
@@ -32,6 +50,11 @@ def shadow(x, n):
 
 def c_shadow(x):
     return shadow(x, 60)
+
+
+def centered_shadow(x):
+    center = np.max(np.where(x >= 21, x, 60))+np.min(np.where(x >= 21, x, 60))
+    return shadow(x, center)
 
 # 逆行变换
 
@@ -66,8 +89,40 @@ def nearest_Cmin(x):
     return x + delta
 
 
-# 靠拢五声音阶
+# 靠拢变换
 
 
 def clamp_CAGED(x):
     return np.where(x >= 21, nearest_CAGED(x), x)
+
+
+def clamp_Cmaj(x):
+    return np.where(x >= 21, nearest_Cmaj(x), x)
+
+
+def clamp_Cmin(x):
+    return np.where(x >= 21, nearest_Cmin(x), x)
+
+
+def section_operate(x):
+    p1 = random.random()
+    p2 = random.random()
+    p3 = random.random()
+    p4 = random.random()
+    if p1 > 0.8:
+        x = reverse(x)
+    if p2 > 0.8:
+        x = centered_shadow(x)
+    if p3 > 0.6:
+        x = randomChange(x)
+    if p4 > 0.9:
+        x = nearest_CAGED(x)
+    return x
+
+
+def random_operate(x):
+    x1 = section_operate(x[0:8])
+    x2 = section_operate(x[8:16])
+    x3 = section_operate(x[16:24])
+    x4 = section_operate(x[24:32])
+    return np.concatenate(x1, x2, x3, x4)

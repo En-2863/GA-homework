@@ -60,7 +60,7 @@ def centered_shadow(x):
 
 
 def centering(x):
-    center = np.average(x)
+    center = np.average(x[x >= 21])
     y = x-center
     x = np.where(y > 12, x-12, x)
     x = np.where(y < -12, x+12, x)

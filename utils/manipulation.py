@@ -127,7 +127,7 @@ def section_operate(x):
     if p3 > 0.6:
         x = randomChange(x)
     if p4 > 0.9:
-        x = nearest_CAGED(x)
+        x = clamp_CAGED(x)
     return x
 
 

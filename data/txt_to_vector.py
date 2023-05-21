@@ -46,23 +46,20 @@ def music_to_vector(pitch):
     if len(vec) != 32:
         print(vec)
         print(len(vec))
+        exit(1)
     return vec
 
 
 # convert music.txt to vector
 def txt_to_vector():
-    #cnt = 0
+    cnt = 0
     vec_list = []
-    #print('here')
-    with open('music.txt') as file:
+
+    with open('.\data\music.txt') as file:
         contents = file.readlines()
         for line in contents:
-            #cnt = cnt + 1
-            #print(line)
-            #print(cnt)
+            cnt = cnt + 1
             pitch = line.split(' ')
             vec = music_to_vector(pitch)
             vec_list.append(vec)
-            #print(cnt)
-            #print(vec)
     return vec_list

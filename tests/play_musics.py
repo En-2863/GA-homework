@@ -61,7 +61,7 @@ if __name__ == '__main__':
     args = parser.parse_args()
 
     # load musics
-    with open('music.txt', 'r') as f:
+    with open('data/music.txt', 'r') as f:
         musics = f.readlines()
     notes = musics[args.i].split()
     

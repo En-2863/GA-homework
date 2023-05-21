@@ -1,13 +1,12 @@
+from utils.player import play_pitches
+from utils.conversions import *
+from utils.manipulation import *
+import argparse
 import os
 import sys
 
 os.chdir(os.path.dirname(os.path.dirname(__file__)))
 sys.path.append(os.path.realpath('.'))
-
-import argparse
-from utils.manipulation import *
-from utils.conversions import *
-from utils.player import play_pitches
 
 
 if __name__ == '__main__':
@@ -25,7 +24,7 @@ if __name__ == '__main__':
     codes = notes2codes(notes)
 
     # manipulate
-    codes_manipulated = clamp(codes)
+    codes_manipulated = clamp_CAGED(codes)
 
     # play pitches
     codes_manipulated = codes2piches(codes_manipulated)

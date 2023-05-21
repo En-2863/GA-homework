@@ -29,16 +29,12 @@ def reverse(x):
 
 
 def nearest(x):
-    t = random.randint(0, 1)
     y = x % 12
-    if y == 0 or y == 2 or y == 4 or y == 7 or y == 9:
-        return x
-    if y == 1 or y == 3 or y == 8:
-        return x-1+t*2
-    if y == 5 or y == 10:
-        return x-1
-    if y == 6 or y == 11:
-        return x+1
+    delta = np.zeros_like(x)
+    delta[(y == 1) | (y == 3) | (y == 8)] = -1 + (np.random.rand(((y == 1) | (y == 3) | (y == 8)).sum()) > 0.5) * 2
+    delta[(y == 5) | (y == 10)] = -1
+    delta[(y == 6) | (y == 11)] = 1
+    return x + delta
 
 #靠拢五声音阶
 def clamp(x):

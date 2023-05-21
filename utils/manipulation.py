@@ -126,8 +126,7 @@ def section_operate(x):
         x = centered_shadow(x)
     if p3 > 0.6:
         x = randomChange(x)
-    if p4 > 0.9:
-        x = clamp_CAGED(x)
+
     return x
 
 

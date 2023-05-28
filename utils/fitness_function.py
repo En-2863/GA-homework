@@ -66,7 +66,8 @@ def fitness_function(x,parameter):  #x是自变量，其余是参数
     part_5 = evaluate_leap_transitions(x_filter)
     return parameter[0]*part_1 + parameter[1]*part_2 + parameter[2]*part_3 + parameter[3]*part_4 + parameter[4]*part_5
 
-y=[64, 20, 20, 67, 67, 20, 20, 20, 64, 20, 20, 62, 60, 20, 20, 20, 62, 20, 20, 64, 67, 20, 20, 64, 62, 20, 20, 20, 20, 20, 20, 20]
-#x = [64, 64, 64,64,64, 64, 64,64,64, 64, 64,64,64, 64, 62,62,62,62,62,62,62,62,62,62,62,62,62,62,62,62]
-#random_y = np.random()
-print(fitness_function(y,initial_parameter))
+if __name__ == '__main__':
+    y=[64, 20, 20, 67, 67, 20, 20, 20, 64, 20, 20, 62, 60, 20, 20, 20, 62, 20, 20, 64, 67, 20, 20, 64, 62, 20, 20, 20, 20, 20, 20, 20]
+    #x = [64, 64, 64,64,64, 64, 64,64,64, 64, 64,64,64, 64, 62,62,62,62,62,62,62,62,62,62,62,62,62,62,62,62]
+    #random_y = np.random()
+    print(fitness_function(y,initial_parameter))

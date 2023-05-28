@@ -1,4 +1,4 @@
-from txt_to_vector import txt_to_tone
+from data.txt_to_vector import txt_to_tone
 import numpy as np
 import random
 
@@ -6,8 +6,11 @@ import random
 
 
 def crossOver(x, y):
-    m = np.random.random(32)
-    result = np.where(m < 0.5, x, y)
+    temp = len(x) / 8
+    m = np.random.randint(1, temp+1)
+    place = m * 8
+    result = np.append(x[:place], y[place:])
+    #print(m, place, result.shape)
     return result
 
 # 平移变换

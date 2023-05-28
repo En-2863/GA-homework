@@ -69,7 +69,7 @@ def txt_to_vector():
 def txt_to_tone():
     vec_list = []
 
-    with open('.\data/\/tone.txt') as file:
+    with open('./data/tone.txt') as file:
         contents = file.readlines()
         for line in contents:
             line = line.lower()

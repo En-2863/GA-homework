@@ -1,4 +1,4 @@
-from txt_to_vector import txt_to_tone
+from data.txt_to_vector import txt_to_tone
 import numpy as np
 import random
 

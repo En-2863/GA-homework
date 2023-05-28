@@ -10,7 +10,7 @@ import random
 import numpy as np
 from tqdm import tqdm
 from utils.conversions import notes2codes
-from utils.manipulation import crossOver, random_operate
+from utils.manipulation import *
 from utils.fitness_function import initial_parameter, fitness_function
 from torch.utils.tensorboard.writer import SummaryWriter
 
@@ -39,6 +39,9 @@ if __name__ == '__main__':
     with open('data/music.txt', 'r') as f:
         musics = f.readlines()
     initial_population = np.stack([notes2codes(music.split()) for music in musics])
+    tone = tone_shift()
+    for i in range(initial_population.shape[0]):
+        initial_population[i]=shift(initial_population[i],-tone[i])
     print(f'loaded musics: {len(initial_population)}')
     
     population = np.tile(initial_population, [int(np.ceil(args.population / len(initial_population)).item()), 1])[:args.population]

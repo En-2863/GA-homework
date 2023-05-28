@@ -1,3 +1,4 @@
+from data.txt_to_vector import txt_to_tone
 import numpy as np
 import random
 
@@ -11,6 +12,9 @@ def crossOver(x, y):
 
 # 平移变换
 
+def tone_shift():
+    arr = np.array(txt_to_tone()) - 60
+    return arr
 
 def shift(x, n):
     return np.where(x >= 21, x+n, x)

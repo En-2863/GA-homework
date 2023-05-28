@@ -102,7 +102,7 @@ def nearest_Cmaj(x):
 def nearest_Cmin(x):
     y = x % 12
     delta = np.zeros_like(x)
-    delta[(y == 1) | (y == 4) | (y == 9) | (y == 11)] = -1 + (np.random.rand(((y == 1) | (y == 3) | (y == 8)).sum()) > 0.5) * 2
+    delta[(y == 1) | (y == 4) | (y == 9) | (y == 11)] = -1 + (np.random.rand(((y == 1) | (y == 4) | (y == 9) | (y == 11)).sum()) > 0.5) * 2
     delta[(y == 6)] = 1
     return x + delta
 

@@ -1,8 +1,9 @@
 import numpy as np
+from data.txt_to_vector import *
 reference=np.array([69, 20, 72, 20, 72, 71, 69, 20, 69, 74, 74, 69, 74, 20, 20, 20, 
 72, 20, 69, 20, 69, 71, 72, 20, 71, 72, 71, 67, 69, 20, 20, 20])  #需要取定一个参考乐曲
 
-initial_parameter= [-0.1,-0.1,1,200,10] #这些都是fitness function参数，之后可以人工修改
+initial_parameter= [-0.1,-0.1,1,200,10,-100,-100,-100] #这些都是fitness function参数，之后可以人工修改
 
 def evaluate_chord(chord):
     # chord是一个音符序列，假设为一个整数列表，表示和弦的音高
@@ -31,7 +32,7 @@ def evaluate_chord(chord):
     if len(intervals)==0:
         return 0
     
-    chord_quality = 1 - (incorrect_intervals / len(intervals))+3*(correct_intervals / len(intervals))
+    chord_quality = 1 - (incorrect_intervals / len(intervals))+(correct_intervals / len(intervals))
     
     return 32*chord_quality/len_intervals # 按照音程数目标准化
 
@@ -63,6 +64,43 @@ def evaluate_leap_transitions(melody):
     
     return leap_transition_fitness
 
+# 量化节奏
+def rythme(chord):
+    rythme=[]
+    for i in range(len(chord)):
+        time=1
+        i+=1
+        if 1==32:
+            break
+
+        while i<32 and chord[i]==20:
+            time+=1
+            i+=1
+        rythme.append(time)
+    return rythme
+
+
+
+
+# 量化休止
+def eval_rest(chord): 
+    rest=[]
+    for x in range(len(chord)):
+        if chord[x]==0:
+            rest.append(x)
+    
+    return rest
+
+
+rest = []
+ref=txt_to_vector()
+for chord in ref:
+    rest.append(eval_rest(ref))
+
+def rest_reference():
+    return rest
+
+
 
 def fitness_function(x,parameter):  #x是自变量，其余是参数 
     part_1 = abs(np.mean(reference)-np.mean(x))  #part_1表示与参考数组的均值差距
@@ -77,14 +115,20 @@ def fitness_function(x,parameter):  #x是自变量，其余是参数
     part_4 = evaluate_chord(x) #part_4表示好听的和弦的比例
     part_5 = evaluate_leap_transitions (x)
 
-    if x[0]==20:
-        return 0 # 避免开始是延音记号
+    rythme_reference=rythme(reference)
+    rythme_x=rythme(x)
+    part_6 = abs(np.mean(rythme_reference)-np.mean(rythme_x))  #part_1表示与参考数组的均值差距
+    part_7 = abs(np.var(rythme_reference)-np.var(rythme_x))
+
     
-    return parameter[0]*part_1 + parameter[1]*part_2 + parameter[2]*part_3 + parameter[3]*part_4 + parameter[4]*part_5
+    part_8=abs(np.mean(rest_reference())-np.mean(eval_rest(x)))+abs(np.var(rest_reference())-np.var(eval_rest(x)))
 
+    if x[0]==20:
+        return -1000000 # 避免开始是延音记号
+    
+    return parameter[0]*part_1 + parameter[1]*part_2 + parameter[2]*part_3 + parameter[3]*part_4 + parameter[4]*part_5+parameter[5]*part_6 + parameter[6]*part_7+parameter[7]*part_8
 
-if __name__ == '__main__':
-    y=[64, 20, 20, 67, 67, 20, 20, 20, 64, 20, 20, 62, 60, 20, 20, 20, 62, 20, 20, 64, 67, 20, 20, 64, 62, 20, 20, 20, 20, 20, 20, 20]
-    #x = [64, 64, 64,64,64, 64, 64,64,64, 64, 64,64,64, 64, 62,62,62,62,62,62,62,62,62,62,62,62,62,62,62,62]
-    #random_y = np.random()
-    print(fitness_function(y,initial_parameter))
+#y=[64, 20, 20, 67, 67, 20, 20, 20, 64, 20, 20, 62, 60, 20, 20, 20, 62, 20, 20, 64, 67, 20, 20, 64, 62, 20, 20, 20, 20, 20, 20, 20]
+#x = [64, 64, 64,64,64, 64, 64,64,64, 64, 64,64,64, 64, 62,62,62,62,62,62,62,62,62,62,62,62,62,62,62,62]
+#random_y = np.random()
+#print(fitness_function(y,initial_parameter))

@@ -51,3 +51,8 @@ def codes2piches(codes):
         else:
             pitches.append(code - 60)
     return pitches
+
+def tone2shift(tone):
+    family = int(tone[-1])
+    level = pitch_map[tone[:-1].lower()]
+    return (family - 4) * 12 + level

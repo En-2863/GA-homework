@@ -13,7 +13,8 @@ from utils.player import play_pitches
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
-    parser.add_argument('--i', type=int, default=17)
+    parser.add_argument('--i', type=int, default=13)
+    parser.add_argument('--in_c', type=bool, default=True)
     parser.add_argument('--dt', type=float, default=0.2)
     args = parser.parse_args()
 
@@ -21,9 +22,19 @@ if __name__ == '__main__':
     with open('data/music.txt', 'r') as f:
         musics = f.readlines()
     notes = musics[args.i].split()
+    codes = notes2codes(notes)
+    
+    # load tones
+    with open('data/tone.txt', 'r') as f:
+        tones = f.readlines()
+    tone = tones[args.i].strip()
+    
+    # to c
+    if args.in_c:
+        codes = shift(codes, tone2shift(tone))
     
     # convert format
-    pichtes = notes2pitches(notes)
+    pichtes = codes2piches(codes)
     
     # play pitches
     play_pitches(pichtes, args.dt)

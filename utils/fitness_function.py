@@ -1,7 +1,7 @@
 import numpy as np
 reference=np.array([74, 73, 74, 62, 61, 69, 64, 66, 62, 74, 73, 71, 73, 78, 81, 83, 79, 78, 76, 79, 78, 76, 74, 73, 71, 69, 67, 66, 64, 67, 66, 64])  #需要取定一个参考乐曲
 
-initial_parameter= [-0.1,-0.1,-1,10,10] #这些都是fitness function参数，之后可以人工修改
+initial_parameter= [-0.1,-0.1,1,200,10] #这些都是fitness function参数，之后可以人工修改
 
 def evaluate_chord(chord):
     # chord是一个音符序列，假设为一个整数列表，表示和弦的音高
@@ -54,12 +54,12 @@ def fitness_function(x,parameter):  #x是自变量，其余是参数
         if (x[i]==0) or (x[i]==20):
             m += 1
     if m < 4:
-        n+=(4-m)
+        n+=(4-m)*2
     if m > 12:
-        n+=m-12
+        n+=(m-12)*2
 
 
-    part_3 = n/2
+    part_3 = 1./n
     x_filter = x[x>=21]
     #print(x,x_filter)
     part_4 = evaluate_chord(x) #part_4表示好听的和弦的比例
